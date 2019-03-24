@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="604.0" prefWidth="970.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ifb.db3d.der6.javafx.MainFx">
+	<children>
+		<TabPane layoutX="295.0" layoutY="163.0" prefHeight="569.0" prefWidth="768.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+			<tabs>
+				<Tab fx:id="bovinosTab" text="Bovinos" />
+				<Tab fx:id="imgTab" text="Imagens">
+					<content>
+						<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+					</content>
+				</Tab>
+				<Tab fx:id="propTab" text="Propriedades">
+					<content>
+						<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+					</content>
+				</Tab>
+				<Tab fx:id="sensoresTab" text="Sensores">
+					<content>
+						<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+					</content>
+				</Tab>
+				<Tab fx:id="animalTab" text="Animal">
+					<content>
+						<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+					</content>
+				</Tab>
+            <Tab fx:id="consultaTab" text="Consulta">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+				<Tab fx:id="sqlTab" text="Sql" />
+			</tabs>
+		</TabPane>
+	</children>
+</AnchorPane>

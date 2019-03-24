@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="sqlPane" minHeight="0.0" minWidth="0.0" prefHeight="768.0" prefWidth="858.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ifb.db3d.der6.javafx.control.QueryControl">
+   <children>
+      <GridPane layoutX="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="53.0" minHeight="0.0" prefHeight="53.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Consultar imagens" GridPane.columnSpan="3" GridPane.halignment="CENTER" />
+            <CheckBox fx:id="idCheckButton" mnemonicParsing="false" text="Id" GridPane.rowIndex="1" />
+            <CheckBox fx:id="sexoCheckButton" mnemonicParsing="false" text="Sexo" GridPane.rowIndex="2" />
+            <Button fx:id="consultarBovinos" mnemonicParsing="false" onAction="#onConsultarBovinos" prefWidth="200.0" text="Consultar apenas bovinos" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <TextField fx:id="idDeTextEntry" promptText="De" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="idAteTextEntry" promptText="Até" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <RadioButton fx:id="radioMacho" mnemonicParsing="false" text="Macho" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <RadioButton fx:id="radioFemea" mnemonicParsing="false" text="Femea" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <CheckBox fx:id="curraleiroCheckButton" mnemonicParsing="false" text="Curraleiro" GridPane.rowIndex="2" />
+                  <CheckBox fx:id="pantaneiroCheckButton" mnemonicParsing="false" text="Pantaneiro" GridPane.rowIndex="1" />
+                  <CheckBox fx:id="neloreCheckButton" mnemonicParsing="false" text="Nelore" />
+               </children>
+            </GridPane>
+            <Label text="Raça" GridPane.rowIndex="3" />
+            <Label text="Filtro para imagens" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+            <Label text="Característica " GridPane.rowIndex="6" />
+            <ComboBox fx:id="caracteristicaComboBox" onAction="#onSelectFeature" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Label text="Valor" GridPane.rowIndex="7" />
+            <ComboBox fx:id="valorComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Label text="Especificação de propriedade" GridPane.rowIndex="8" />
+            <TextField fx:id="specPropDeTextEntry" promptText="De" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <TextField fx:id="specPropAteTextEntry" promptText="Até" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+            <Button fx:id="addFiltro" mnemonicParsing="false" onAction="#onAddFiltro" prefWidth="200.0" text="Adicionar filtro" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+            <ListView fx:id="propListView" GridPane.columnSpan="3" GridPane.rowIndex="10" GridPane.rowSpan="2" />
+            <Button fx:id="consultarImagens" mnemonicParsing="false" onAction="#onConsultarImagens" prefHeight="25.0" prefWidth="200.0" text="Consultar imagens" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
+            <Button fx:id="removerFiltro" mnemonicParsing="false" onAction="#onRemoverFiltro" prefWidth="200.0" text="Remover filtro selecionado" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

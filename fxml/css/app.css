@@ -1,0 +1,40 @@
+#registro-title {
+	-fx-font-size: 18px;
+}
+
+#bovinoRegistroPane {
+	-fx-padding: 20px;
+}
+
+#sqlPane {
+	-fx-padding: 20px;
+}
+
+#sqlTextEntry {
+	-fx-font-size: 14px;
+	-fx-font-family: monospace;
+}
+
+#regiaoPane {
+	-fx-padding: 20px;
+}
+
+#regiaoTitle{
+	-fx-font-size: 18px;
+}
+
+#imageViewSplitPane {
+	-fx-box-border: transparent;
+}
+
+#grid-padding{
+	-fx-padding: 20px;
+}
+
+.root{
+    -fx-font-size: 12pt;
+    -fx-base: #3f3f3f;
+    -fx-background: #5b5b5b;
+    -fx-font-weight: bold;
+    -fx-font-family: "Sans Serif";
+}

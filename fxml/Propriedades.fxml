@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="regiaoPane" minHeight="0.0" minWidth="0.0" prefHeight="672.0" prefWidth="1027.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ifb.db3d.der6.javafx.control.CamposControl">
+   <children>
+      <BorderPane prefHeight="672.0" prefWidth="1027.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <GridPane BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="204.0" minWidth="10.0" prefWidth="155.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="277.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0" minWidth="10.0" prefWidth="183.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="87.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="71.0" minHeight="0.0" prefHeight="41.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label id="regiaoTitle" contentDisplay="CENTER" prefHeight="33.0" prefWidth="798.0" text="Adicionar nova definição de propriedade " GridPane.columnSpan="3" GridPane.valignment="CENTER" />
+                  <Label alignment="CENTER" prefHeight="258.0" prefWidth="638.0" text="Nome" GridPane.rowIndex="1" />
+                  <TextField fx:id="caracteristicaEntry" promptText="Nome da propriedade" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="adicionarButton" mnemonicParsing="false" onAction="#onAdd" prefHeight="28.0" prefWidth="112.0" text="Adicionar" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+               </children>
+            </GridPane>
+         </top>
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label id="regiaoTitle" prefHeight="51.0" prefWidth="716.0" text="Propriedades registradas" />
+                  <HBox>
+                     <children>
+                        <Button fx:id="removerButton" alignment="CENTER" mnemonicParsing="false" onAction="#onRemove" prefWidth="100.0" text="Remover" />
+                     </children>
+                  </HBox>
+                  <ListView fx:id="listView" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
