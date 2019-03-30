@@ -53,8 +53,7 @@ public class BovinosControl {
 			MsgPopupControl.showNewPopup("Novo registro [bovinoCod: " + bovinoCod + ", sexo: " + sexo + ", raca: " + raca +", dataNascimento: " + dataNascimento, "Novo registro");
 		} catch(Exception e)
 		{
-			System.err.println("Erro ao registrar bovino: " + e.getMessage());
-			MsgPopupControl.showNewPopup("Erro ao registrar bovino: " + e.getMessage(), "Erro");
+			MsgPopupControl.showExceptionAlert("Erro ao registrar bovino", "Erro", "Erro de registro", e);
 		}
 		
 	}

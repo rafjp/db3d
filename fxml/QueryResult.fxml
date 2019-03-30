@@ -51,7 +51,7 @@
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                           <items>
                               <Button fx:id="btnTransferirDados" mnemonicParsing="false" onAction="#onTransferirDados" text="Transferir arquivos" />
-                              <Button mnemonicParsing="false" text="Deletar" />
+                              <Button fx:id="deletarBtn" mnemonicParsing="false" onAction="#onDelete" text="Deletar" />
                           </items>
                         </ToolBar>
                         <TreeView fx:id="mainTreeView" onMouseClicked="#onTreeSelect" VBox.vgrow="ALWAYS" />

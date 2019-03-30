@@ -99,7 +99,7 @@ public class QueryControl {
 				filtro += "; " + Float.parseFloat(specPropDeTextEntry.getText()) + " - "
 						+ Float.parseFloat(specPropAteTextEntry.getText());
 			} catch (Exception e) {
-				MsgPopupControl.showNewPopup("Erro no valor da propriedade: " + e.getMessage(), "Erro");
+				MsgPopupControl.showExceptionAlert("Erro no valor da propriedade", "Erro", "Value error", e);
 				return;
 			}
 		}
@@ -126,7 +126,7 @@ public class QueryControl {
 				idDe = Integer.parseInt(idDeTextEntry.getText());
 				idAte = Integer.parseInt(idAteTextEntry.getText());
 			} catch (Exception e) {
-				MsgPopupControl.showNewPopup("Id erro: " + e.getMessage(), "Erro");
+				MsgPopupControl.showExceptionAlert("Erro na identidade do bovino.", "Erro", "Id erro!", e);
 				return null;
 			}
 			queryCommand += " where bov.bovino_id >= " + idDe + " and bov.bovino_id <= " + idAte;

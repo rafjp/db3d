@@ -121,14 +121,6 @@ public class ImagemInfo {
 		this.regiao = regiao;
 	}
 
-	public Sensor getSendor() {
-		return sensor;
-	}
-
-	public void setSendor(Sensor sensor) {
-		this.sensor = sensor;
-	}
-
 	@Override
 	public String toString() {
 		return "ImagemInfo [imagem_info_id=" + imagem_info_id + ", envio=" + envio + ", regiao=" + regiao + ", sensor="

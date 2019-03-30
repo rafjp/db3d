@@ -3,6 +3,7 @@ package ifb.db3d.der6.javafx.control;
 import java.io.File;
 import java.io.IOException;
 import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,20 +46,24 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class QueryViewControl {
-	private static List<Imagem> imagens;
 	ToggleGroup radioButtonSexoGroup;
-//	private Bovino lastBovinoEdit;
 	private List<Sensor> lastQuerySensor;
 	private List<Regiao> lastQueryRegiao;
 	private ImagemInfo lastImagemInfo;
-	
+	private Bovino lastBovinoEdit;
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-    @FXML
-    void initialize()
-    {
+	void init(List<Imagem> imagens) {
+		btnEditarInfoBovino.setDisable(true);
+		btnRemoverSelecionado.setDisable(true);
+		deletarBtn.setDisable(true);
+		btnAdicionar.setDisable(true);
+		comboBoxSensor.setDisable(true);
+		comboBoxRegiao.setDisable(true);
+
 		updateComboBoxs();
-		
-    	TableColumn campoColunm = new TableColumn("Campo");
+
+		TableColumn campoColunm = new TableColumn("Campo");
 		campoColunm.setCellValueFactory(new PropertyValueFactory<>("campo"));
 
 		TableColumn propColumn = new TableColumn("Propriedade");
@@ -66,264 +71,364 @@ public class QueryViewControl {
 
 		propTableView.getColumns().clear();
 		propTableView.getColumns().addAll(campoColunm, propColumn);
-    	
-    	radioButtonSexoGroup = new ToggleGroup();
-    	
-    	bovinoRacaCombo.getItems().addAll(
-				"Nelore",
-				"Pantaneiro",
-				"Curraleiro");
-    	bovinoRacaCombo.getSelectionModel().select(0);
-		
-    	bovinoRadioMacho.setToggleGroup(radioButtonSexoGroup);
-    	bovinoRadioFemea.setToggleGroup(radioButtonSexoGroup);
+
+		radioButtonSexoGroup = new ToggleGroup();
+
+		bovinoRacaCombo.getItems().addAll("Nelore", "Pantaneiro", "Curraleiro");
+		bovinoRacaCombo.getSelectionModel().select(0);
+
+		bovinoRadioMacho.setToggleGroup(radioButtonSexoGroup);
+		bovinoRadioFemea.setToggleGroup(radioButtonSexoGroup);
 		bovinoRadioFemea.setSelected(true);
-    	
-    	TreeItem<String> root = new TreeItem<String>("Banco de dados", getIcon("puzzle-piece-2x"));
-    	
-    	// TreeItem<String> bovinoTreeItem = new TreeItem<String>(bovino.toString(), getIcon("media-record-2x.png"));
-    	
-    	Set<Bovino> bovinos = new HashSet<Bovino>();
-    	
-    	for(Imagem imagem: imagens)
-    	{
-    		for(Bovino bovino: imagem.getImagemInfo().getBovinos())
-    		{	
-    			bovinos.add(bovino);
-    		}
-    	}
-    	
-    	for(Bovino bovino: bovinos)
-		{	
-    		String bovinoText = String.format("bov %05d %s", bovino.getBovino_id(), bovino.getNascimento().toString());
-    		TreeItem<String> bovinoTreeItem = new TreeItem<String>(bovinoText, getIcon("media-record-2x"));
-    		
-    		for(ImagemInfo imagemInfo: bovino.getImagens())
-    		{
-    			String imagemInfoText = String.format("img %05d %s %s", imagemInfo.getImagem_info_id(), imagemInfo.getRegiao().getCaracteristica(), imagemInfo.getEnvio());
-    			TreeItem<String> imgInfoTreeItem = new TreeItem<String>(imagemInfoText, getIcon("folder-2x"));
-    			
-    			for(Imagem imagem: imagens)
-    			{
-    				if(imagem.getImagemInfo() == imagemInfo)
-    				{
-    					String icon = "file-2x";
-    					if(imagem.getExtencao().toLowerCase().endsWith(".png") || imagem.getExtencao().toLowerCase().endsWith(".jpg") || imagem.getExtencao().toLowerCase().endsWith(".gif") ||
-    							imagem.getExtencao().toLowerCase().endsWith(".tiff") || imagem.getExtencao().toLowerCase().endsWith(".jpeg"))
-    					{
-    						icon = "image-2x";
-    					}
-    					
-    					String imageText = String.format("arq %05d %s", imagem.getImagem_id(), imagem.getExtencao());
-    					TreeItem<String> imgTreeItem = new TreeItem<String>(imageText, getIcon(icon));
-    					imgInfoTreeItem.getChildren().add(imgTreeItem);
-    				}
-    			}
-    			
-    			bovinoTreeItem.getChildren().add(imgInfoTreeItem);
-    		}
-    		root.getChildren().add(bovinoTreeItem);
+
+		TreeItem<String> root = new TreeItem<String>("Banco de dados", getIcon("puzzle-piece-2x"));
+
+		Set<Bovino> bovinos = new HashSet<Bovino>();
+
+		for (Imagem imagem : imagens) {
+			for (Bovino bovino : imagem.getImagemInfo().getBovinos()) {
+				bovinos.add(bovino);
+			}
 		}
-    	
-    	root.setExpanded(true);
-    	mainTreeView.setRoot(root);
-    }
-    
-    private ImageView getIcon(String path)
-    {
-    	return new ImageView(new Image(FxmlResource.getIconPath(path)));
-    }
-    
-    @FXML
-    private Button btnEditarInfoBovino;
 
-    @FXML
-    private TextField txtBovinoCod;
+		for (Bovino bovino : bovinos) {
+			String bovinoText = String.format("bov %05d %s", bovino.getBovino_id(), bovino.getNascimento().toString());
+			TreeItem<String> bovinoTreeItem = new TreeItem<String>(bovinoText, getIcon("media-record-2x"));
 
-    @FXML
-    private RadioButton bovinoRadioMacho;
+			for (ImagemInfo imagemInfo : bovino.getImagens()) {
+				String imagemInfoText = String.format("img %05d %s %s", imagemInfo.getImagem_info_id(),
+						imagemInfo.getRegiao().getCaracteristica(), imagemInfo.getEnvio());
+				TreeItem<String> imgInfoTreeItem = new TreeItem<String>(imagemInfoText, getIcon("folder-2x"));
 
-    @FXML
-    private RadioButton bovinoRadioFemea;
+				for (Imagem imagem : imagens) {
+					if (imagem.getImagemInfo() == imagemInfo) {
+						String icon = "file-2x";
+						if (imagem.getExtencao().toLowerCase().endsWith(".png")
+								|| imagem.getExtencao().toLowerCase().endsWith(".jpg")
+								|| imagem.getExtencao().toLowerCase().endsWith(".gif")
+								|| imagem.getExtencao().toLowerCase().endsWith(".tiff")
+								|| imagem.getExtencao().toLowerCase().endsWith(".jpeg")) {
+							icon = "image-2x";
+						}
 
-    @FXML
-    private ComboBox<String> bovinoRacaCombo;
+						String imageText = String.format("arq %05d %s", imagem.getImagem_id(), imagem.getExtencao());
+						TreeItem<String> imgTreeItem = new TreeItem<String>(imageText, getIcon(icon));
+						imgInfoTreeItem.getChildren().add(imgTreeItem);
+					}
+				}
 
-    @FXML
-    private DatePicker bovinoDataNascimento;
+				bovinoTreeItem.getChildren().add(imgInfoTreeItem);
+			}
+			root.getChildren().add(bovinoTreeItem);
+		}
 
-    @FXML
-    private Button btnTransferirDados;
+		root.setExpanded(true);
+		mainTreeView.setRoot(root);
 
-    @FXML
-    private TreeView<String> mainTreeView;
+		mainTreeView.getSelectionModel().select(0);
+	}
 
-    @FXML
-    private Button btnAdicionar;
+	private ImageView getIcon(String path) {
+		return new ImageView(new Image(FxmlResource.getIconPath(path)));
+	}
 
-    @FXML
-    private Button btnRemoverSelecionado;
+	@FXML
+	private Button btnEditarInfoBovino;
 
-    @FXML
-    private TableView<PropriedadeItem> propTableView;
+	@FXML
+	private TextField txtBovinoCod;
 
-    @FXML
-    private ComboBox<String> comboBoxSensor;
+	@FXML
+	private RadioButton bovinoRadioMacho;
 
-    @FXML
-    private ComboBox<String> comboBoxRegiao;
+	@FXML
+	private RadioButton bovinoRadioFemea;
 
-    @FXML
-    void onAdicionar(ActionEvent event) {
+	@FXML
+	private ComboBox<String> bovinoRacaCombo;
 
-    }
+	@FXML
+	private DatePicker bovinoDataNascimento;
 
-    @FXML
-    void onComboChangeRegiao(ActionEvent event) {
+	@FXML
+	private Button btnTransferirDados;
 
-    }
+	@FXML
+	private TreeView<String> mainTreeView;
 
-    @FXML
-    void onComboChangeSensor(ActionEvent event) {
+	@FXML
+	private Button btnAdicionar;
 
-    }
+	@FXML
+	private Button deletarBtn;
 
-    @FXML
-    void onEditarInfoBovino(ActionEvent event) {
+	@FXML
+	private Button btnRemoverSelecionado;
 
-    }
+	@FXML
+	private TableView<PropriedadeItem> propTableView;
 
-    @FXML
-    void onRemoverSelecionado(ActionEvent event) {
+	@FXML
+	private ComboBox<String> comboBoxSensor;
 
-    }
+	@FXML
+	private ComboBox<String> comboBoxRegiao;
 
-    @FXML
-    void onTransferirDados(ActionEvent event) {
-    	String item = mainTreeView.getSelectionModel().getSelectedItem().getValue();
-    	
-    	if(item.startsWith("bov"))
-    	{
-    		// TODO salvar tudo!
-    	} else if(item.startsWith("img"))
-    	{
-    		ImagemInfo imagemInfo = ImagemInfoCRUD.get(Integer.parseInt(item.split(" ")[1]));
-    		DirectoryChooser chooser = new DirectoryChooser();
-    		chooser.setTitle("Selecione uma pasta");
-    		File selectedDirectory = chooser.showDialog(btnTransferirDados.getScene().getWindow());
-    		boolean pass = true;
-    		for(Imagem imagem: imagemInfo.getImagens())
-    		{
-    			try {
+	@FXML
+	void onAdicionar(ActionEvent event) {
+
+	}
+
+	@FXML
+	void onDelete(ActionEvent event) {
+		String item = mainTreeView.getSelectionModel().getSelectedItem().getValue();
+		if (item.startsWith("img")) {
+			ImagemInfo imagemInfo = ImagemInfoCRUD.get(Integer.parseInt(item.split(" ")[1]));
+
+			if (!MsgPopupControl.showNewConfirmAlert(
+					"A operação é irreversível, todos os dados conectados a imagem serão deletados.",
+					"Deletar permanentemente?", "Confirmar"))
+				return;
+
+			ImagemInfoCRUD.delete(imagemInfo);
+			TreeItem<String> tt = mainTreeView.getSelectionModel().getSelectedItem();
+			tt.getParent().getChildren().remove(tt);
+
+		} else if (item.startsWith("arq")) {
+			Imagem down = ImagemCRUD.get(Integer.parseInt(item.split(" ")[1]));
+
+			if (!MsgPopupControl.showNewConfirmAlert(
+					"A operação é irreversível, todos os dados conectados a imagem serão deletados.",
+					"Deletar permanentemente?", "Confirmar"))
+				return;
+
+			ImagemCRUD.delete(down);
+			TreeItem<String> tt = mainTreeView.getSelectionModel().getSelectedItem();
+			tt.getParent().getChildren().remove(tt);
+		}
+	}
+
+	@FXML
+	void onComboChangeRegiao(ActionEvent event) {
+		String item = mainTreeView.getSelectionModel().getSelectedItem().getValue();
+		ImagemInfo imagemInfo = null;
+
+		if (item.startsWith("img")) {
+			imagemInfo = ImagemInfoCRUD.get(Integer.parseInt(item.split(" ")[1]));
+		} else if (item.startsWith("arq")) {
+			Imagem down = ImagemCRUD.get(Integer.parseInt(item.split(" ")[1]));
+			imagemInfo = down.getImagemInfo();
+		} else {
+			return;
+		}
+
+		int regiaoId = Integer.parseInt(comboBoxRegiao.getSelectionModel().getSelectedItem().split(" - ")[0]);
+		Regiao toChange = null;
+		for (Regiao regiao : lastQueryRegiao) {
+			if (regiao.getRegiao_id().equals(regiaoId)) {
+				toChange = regiao;
+				break;
+			}
+		}
+
+		if (toChange == null) {
+			return;
+		}
+
+		if (imagemInfo.getRegiao().getRegiao_id() == toChange.getRegiao_id()) {
+			return;
+		}
+
+		imagemInfo.setRegiao(toChange);
+		ImagemInfoCRUD.update(imagemInfo);
+		MsgPopupControl.showNewPopup("A região da imagem foi alterada!", "Update");
+	}
+
+	@FXML
+	void onComboChangeSensor(ActionEvent event) {
+		String item = mainTreeView.getSelectionModel().getSelectedItem().getValue();
+		ImagemInfo imagemInfo = null;
+
+		if (item.startsWith("img")) {
+			imagemInfo = ImagemInfoCRUD.get(Integer.parseInt(item.split(" ")[1]));
+		} else if (item.startsWith("arq")) {
+			Imagem down = ImagemCRUD.get(Integer.parseInt(item.split(" ")[1]));
+			imagemInfo = down.getImagemInfo();
+		} else {
+			return;
+		}
+
+		int sensorId = Integer.parseInt(comboBoxSensor.getSelectionModel().getSelectedItem().split(" - ")[0]);
+		Sensor toChange = null;
+		for (Sensor sensor : lastQuerySensor) {
+			if (sensor.getSensor_id().equals(sensorId)) {
+				toChange = sensor;
+				break;
+			}
+		}
+
+		if (toChange == null) {
+			return;
+		}
+
+		if (imagemInfo.getSensor().getSensor_id() == toChange.getSensor_id()) {
+			return;
+		}
+
+		imagemInfo.setSensor(toChange);
+		ImagemInfoCRUD.update(imagemInfo);
+		MsgPopupControl.showNewPopup("O sensor da imagem foi alterado!", "Update");
+	}
+
+	@FXML
+	void onEditarInfoBovino(ActionEvent event) {
+		lastBovinoEdit.setRaca(bovinoRacaCombo.getSelectionModel().getSelectedItem());
+		lastBovinoEdit.setNascimento(
+				Date.from(bovinoDataNascimento.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		lastBovinoEdit.setSexo(bovinoRadioFemea.isSelected());
+		BovinoCRUD.update(lastBovinoEdit);
+		MsgPopupControl.showNewPopup("Informações do bovino atualizadas!", "Update");
+	}
+
+	@FXML
+	void onRemoverSelecionado(ActionEvent event) {
+
+	}
+
+	@FXML
+	void onTransferirDados(ActionEvent event) {
+		String item = mainTreeView.getSelectionModel().getSelectedItem().getValue();
+
+		if (item.startsWith("bov")) {
+			// TODO salvar tudo!
+		} else if (item.startsWith("img")) {
+			ImagemInfo imagemInfo = ImagemInfoCRUD.get(Integer.parseInt(item.split(" ")[1]));
+			DirectoryChooser chooser = new DirectoryChooser();
+			chooser.setTitle("Selecione uma pasta");
+			File selectedDirectory = chooser.showDialog(btnTransferirDados.getScene().getWindow());
+			boolean pass = true;
+			for (Imagem imagem : imagemInfo.getImagens()) {
+				try {
 					imagem.salvarArquivo(selectedDirectory.getAbsolutePath(), imagem.getExtencao());
 				} catch (IOException e) {
 					pass = false;
 					e.printStackTrace();
 				}
-    		}
-    		if(!pass)
-    		{
-    			MsgPopupControl.showNewPopup("Não foi possível salvar o arquivo!", "Erro");
-    		}
-    	} else if(item.startsWith("arq"))
-    	{	
-    		Imagem down = ImagemCRUD.get(Integer.parseInt(item.split(" ")[1]));
-    		FileChooser fileChooser = new FileChooser();
-    		fileChooser.setInitialFileName(down.getExtencao());
-    		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("All Files (*.*)", "*.*");
-            fileChooser.getExtensionFilters().add(extFilter);
-    		File file = fileChooser.showSaveDialog(btnTransferirDados.getScene().getWindow());
-    		if (file == null)
-    			MsgPopupControl.showNewPopup("Caminho inválido!", "Erro");
-    		try {
+			}
+			if (!pass) {
+				MsgPopupControl.showNewPopup("Não foi possível salvar o arquivo!", "Erro");
+			}
+		} else if (item.startsWith("arq")) {
+			Imagem down = ImagemCRUD.get(Integer.parseInt(item.split(" ")[1]));
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setInitialFileName(down.getExtencao());
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("All Files (*.*)", "*.*");
+			fileChooser.getExtensionFilters().add(extFilter);
+			File file = fileChooser.showSaveDialog(btnTransferirDados.getScene().getWindow());
+			if (file == null)
+				MsgPopupControl.showNewPopup("Caminho inválido!", "Erro");
+			try {
 				down.salvarArquivo(file.getAbsolutePath());
 			} catch (IOException e) {
 				MsgPopupControl.showNewPopup("Não foi possível salvar o arquivo!", "Erro");
 			}
-    	}
-    }
+		}
+	}
 
-    @FXML
-    void onTreeSelect(MouseEvent event) {
-    	
-    	String item = mainTreeView.getSelectionModel().getSelectedItem().getValue();
-    	
-    	if(item.startsWith("bov"))
-    	{
-    		Bovino lastBovinoEdit = BovinoCRUD.get(Integer.parseInt(item.split(" ")[1]));
-    		txtBovinoCod.setText(lastBovinoEdit.getBovino_id() + "");
-    		if(lastBovinoEdit.getSexo())
-    		{
-    			bovinoRadioMacho.setSelected(true);
-    		} else
-    		{
-    			bovinoRadioFemea.setSelected(true);
-    		}
-    		if(lastBovinoEdit.getRaca().equalsIgnoreCase("Nelore"))
-    		{
-    			bovinoRacaCombo.getSelectionModel().select(0);
-    		} else if(lastBovinoEdit.getRaca().equalsIgnoreCase("Pantaneiro"))
-    		{
-    			bovinoRacaCombo.getSelectionModel().select(1);
-    		} else if(lastBovinoEdit.getRaca().equalsIgnoreCase("Curraleiro"))
-    		{
-    			bovinoRacaCombo.getSelectionModel().select(2);
-    		}
-    		bovinoDataNascimento.setValue(lastBovinoEdit.getNascimento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-    		lastBovinoEdit.getNascimento();
-    	}
-    	
-    	else if(item.startsWith("img"))
-    	{
-    		lastImagemInfo = ImagemInfoCRUD.get(Integer.parseInt(item.split(" ")[1]));
-    		
-    		propTableView.getItems().clear();
-    		for(Propriedade prop: lastImagemInfo.getPropriedades())
-    		{
-    			PropriedadeItem propItem = new PropriedadeItem(prop.getCampo().getNome(), prop.getValora().toString());
-    			propTableView.getItems().add(propItem);
-    		}
-    		
-    		int select = 0;
-    		for(Regiao regiao: lastQueryRegiao)
-    		{
-    			if(regiao.getRegiao_id().equals(lastImagemInfo.getRegiao().getRegiao_id()))
-    				break;
-    			select ++;
-    		}
-    		comboBoxRegiao.getSelectionModel().select(select);
-    		
-    		
-    		 select = 0;
-     		for(Sensor sensor: lastQuerySensor)
-     		{
-     			if(sensor.getSensor_id().equals(lastImagemInfo.getSensor().getSensor_id()))
-     				break;
-     			select ++;
-     		}
-     		comboBoxSensor.getSelectionModel().select(select);
-    		
-    	} else if(item.startsWith("arq"))
-    	{
-    		item = mainTreeView.getSelectionModel().getSelectedItem().getParent().getValue();
-    		
-    		lastImagemInfo = ImagemInfoCRUD.get(Integer.parseInt(item.split(" ")[1]));
-    		
-    		propTableView.getItems().clear();
-    		for(Propriedade prop: lastImagemInfo.getPropriedades())
-    		{
-    			PropriedadeItem propItem = new PropriedadeItem(prop.getCampo().getNome(), prop.getValora().toString());
-    			propTableView.getItems().add(propItem);
-    		}
-    	}
-    }
-    
-    @SuppressWarnings("unchecked")
-	private void updateComboBoxs()
-    {
-    	Query query;
-    	
-    	query = ConnectionFactory.getEntityManager().createQuery("select sens from Sensor sens");
+	@FXML
+	void onTreeSelect(MouseEvent event) {
+
+		comboBoxRegiao.setDisable(true);
+		comboBoxSensor.setDisable(true);
+
+		String item = mainTreeView.getSelectionModel().getSelectedItem().getValue();
+
+		if (item.startsWith("bov")) {
+			lastBovinoEdit = BovinoCRUD.get(Integer.parseInt(item.split(" ")[1]));
+			txtBovinoCod.setText(lastBovinoEdit.getBovino_id() + "");
+			if (lastBovinoEdit.getSexo()) {
+				bovinoRadioMacho.setSelected(true);
+			} else {
+				bovinoRadioFemea.setSelected(true);
+			}
+			if (lastBovinoEdit.getRaca().equalsIgnoreCase("Nelore")) {
+				bovinoRacaCombo.getSelectionModel().select(0);
+			} else if (lastBovinoEdit.getRaca().equalsIgnoreCase("Pantaneiro")) {
+				bovinoRacaCombo.getSelectionModel().select(1);
+			} else if (lastBovinoEdit.getRaca().equalsIgnoreCase("Curraleiro")) {
+				bovinoRacaCombo.getSelectionModel().select(2);
+			}
+			bovinoDataNascimento
+					.setValue(lastBovinoEdit.getNascimento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			lastBovinoEdit.getNascimento();
+
+			btnEditarInfoBovino.setDisable(false);
+		}
+
+		else if (item.startsWith("img")) {
+			lastImagemInfo = ImagemInfoCRUD.get(Integer.parseInt(item.split(" ")[1]));
+
+			propTableView.getItems().clear();
+			for (Propriedade prop : lastImagemInfo.getPropriedades()) {
+				PropriedadeItem propItem = new PropriedadeItem(prop.getCampo().getNome(), prop.getValora().toString());
+				propTableView.getItems().add(propItem);
+			}
+
+			int select = 0;
+			for (Regiao regiao : lastQueryRegiao) {
+				if (regiao.getRegiao_id().equals(lastImagemInfo.getRegiao().getRegiao_id()))
+					break;
+				select++;
+			}
+			comboBoxRegiao.getSelectionModel().select(select);
+
+			select = 0;
+			for (Sensor sensor : lastQuerySensor) {
+				if (sensor.getSensor_id().equals(lastImagemInfo.getSensor().getSensor_id()))
+					break;
+				select++;
+			}
+			comboBoxSensor.getSelectionModel().select(select);
+
+			comboBoxRegiao.setDisable(false);
+			comboBoxSensor.setDisable(false);
+
+			btnEditarInfoBovino.setDisable(false);
+			btnRemoverSelecionado.setDisable(false);
+			deletarBtn.setDisable(false);
+			btnAdicionar.setDisable(false);
+
+		} else if (item.startsWith("arq")) {
+			item = mainTreeView.getSelectionModel().getSelectedItem().getParent().getValue();
+
+			lastImagemInfo = ImagemInfoCRUD.get(Integer.parseInt(item.split(" ")[1]));
+
+			propTableView.getItems().clear();
+			for (Propriedade prop : lastImagemInfo.getPropriedades()) {
+				PropriedadeItem propItem = new PropriedadeItem(prop.getCampo().getNome(), prop.getValora().toString());
+				propTableView.getItems().add(propItem);
+			}
+
+			comboBoxRegiao.setDisable(false);
+			comboBoxSensor.setDisable(false);
+
+			btnEditarInfoBovino.setDisable(false);
+			btnRemoverSelecionado.setDisable(false);
+			deletarBtn.setDisable(false);
+			btnAdicionar.setDisable(false);
+		} else {
+			btnEditarInfoBovino.setDisable(true);
+			btnRemoverSelecionado.setDisable(true);
+			deletarBtn.setDisable(true);
+			btnAdicionar.setDisable(true);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void updateComboBoxs() {
+		Query query;
+
+		query = ConnectionFactory.getEntityManager().createQuery("select sens from Sensor sens");
 		lastQuerySensor = (List<Sensor>) query.getResultList();
 		comboBoxSensor.getItems().clear();
 		for (Sensor sensor : lastQuerySensor) {
@@ -342,33 +447,33 @@ public class QueryViewControl {
 
 		if (comboBoxRegiao.getItems().size() > 0)
 			comboBoxRegiao.getSelectionModel().select(0);
-    }
-    
-    private static void createPopup(List<Imagem> imagens, int w, int h)
-    {
-    	QueryViewControl.imagens = imagens;
-    	
-    	try {
-    		Stage msgStage = new Stage();
-    		msgStage.getIcons().add(new Image(FxmlResource.getIconPath("document-4x")));
-	    	Pane pane = FXMLLoader.load(FxmlResource.getFxmlPath("QueryResult"));
+	}
+
+	private static void createPopup(List<Imagem> imagens, int w, int h) {
+		try {
+			FXMLLoader loader = new FXMLLoader(FxmlResource.getFxmlPath("QueryResult"));
+
+			Stage msgStage = new Stage();
+			msgStage.getIcons().add(new Image(FxmlResource.getIconPath("document-4x")));
+			Pane pane = loader.load();
+			QueryViewControl queryViewControl = (QueryViewControl) loader.getController();
+			queryViewControl.init(imagens);
 			Scene scene = new Scene(pane, w, h);
 			scene.getStylesheets().add(FxmlResource.getCssPath("app"));
 			msgStage.setTitle("Resultado da consulta");
 			msgStage.setScene(scene);
 			msgStage.show();
-    	} catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		System.exit(0);
-    	}
-    }
-    
-    public static void showNewPopup(List<Imagem> imagens) {
-    	createPopup(imagens, 1100, 600);
-    }
-    
-    public static void showNewPopup(List<Imagem> imagens, int width, int height) {
-    	createPopup(imagens, width, height);
-    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+	}
+
+	public static void showNewPopup(List<Imagem> imagens) {
+		createPopup(imagens, 1100, 600);
+	}
+
+	public static void showNewPopup(List<Imagem> imagens, int width, int height) {
+		createPopup(imagens, width, height);
+	}
 }
