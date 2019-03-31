@@ -39,11 +39,10 @@ public class SqlControl {
 				buffer += object.toString() + "\n";
 			}
 			MsgPopupControl.showNewPopup(buffer, "Consulta", 800, 600);
-		} catch(Exception e)
-		{
+		} catch (Exception e) {
 			MsgPopupControl.showNewPopup(e.getMessage(), "Erro ao executar consulta");
 		}
-		
+
 	}
 
 	@FXML

@@ -18,7 +18,7 @@ public class FxmlResource {
 		}
 		return url;
 	}
-	
+
 	public static String getIconPath(String file) {
 		String path = "";
 		try {

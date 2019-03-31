@@ -23,9 +23,8 @@ public class CampoCRUD {
 		ConnectionFactory.getEntityManager().remove(campo);
 		ConnectionFactory.getEntityManager().getTransaction().commit();
 	}
-	
-	public static Campo get(int id)
-	{
+
+	public static Campo get(int id) {
 		EntityManager em = ConnectionFactory.getEntityManager();
 		return em.find(Campo.class, id);
 	}

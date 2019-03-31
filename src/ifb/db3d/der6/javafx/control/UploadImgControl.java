@@ -143,7 +143,7 @@ public class UploadImgControl {
 			scene.getStylesheets().add(FxmlResource.getCssPath("app"));
 			msgStage.setTitle("Upload");
 			msgStage.setScene(scene);
-			msgStage.show();
+			msgStage.showAndWait();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);

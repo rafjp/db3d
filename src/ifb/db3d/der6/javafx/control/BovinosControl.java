@@ -27,15 +27,15 @@ public class BovinosControl {
 
 	@FXML
 	private ComboBox<String> racaComboBox;
-	
-    @FXML
-    private DatePicker dataDeNascimento;
+
+	@FXML
+	private DatePicker dataDeNascimento;
 
 	@FXML
 	private Button bovinoRegistrar;
-	
+
 	ToggleGroup radioButtonSexoGroup;
-	
+
 	public BovinosControl() {
 		radioButtonSexoGroup = new ToggleGroup();
 	}
@@ -47,30 +47,28 @@ public class BovinosControl {
 			boolean sexo = femeaCheckButton.isSelected();
 			String raca = racaComboBox.getSelectionModel().getSelectedItem();
 			LocalDate dataNascimento = dataDeNascimento.getValue();
-			Bovino bovino = new Bovino(bovinoCod, sexo, raca, Date.from(dataDeNascimento.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			Bovino bovino = new Bovino(bovinoCod, sexo, raca,
+					Date.from(dataDeNascimento.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			BovinoCRUD.create(bovino);
-			System.out.println("Novo registro [bovinoCod: " + bovinoCod + ", sexo: " + sexo + ", raca: " + raca +", dataNascimento: " + dataNascimento);
-			MsgPopupControl.showNewPopup("Novo registro [bovinoCod: " + bovinoCod + ", sexo: " + sexo + ", raca: " + raca +", dataNascimento: " + dataNascimento, "Novo registro");
-		} catch(Exception e)
-		{
+			System.out.println("Novo registro [bovinoCod: " + bovinoCod + ", sexo: " + sexo + ", raca: " + raca
+					+ ", dataNascimento: " + dataNascimento);
+			MsgPopupControl.showNewPopup("Novo registro [bovinoCod: " + bovinoCod + ", sexo: " + sexo + ", raca: "
+					+ raca + ", dataNascimento: " + dataNascimento, "Novo registro");
+		} catch (Exception e) {
 			MsgPopupControl.showExceptionAlert("Erro ao registrar bovino", "Erro", "Erro de registro", e);
 		}
-		
+
 	}
-	
+
 	@FXML
-	public void initialize()
-	{
-		racaComboBox.getItems().addAll(
-				"Nelore",
-				"Pantaneiro",
-				"Curraleiro");
+	public void initialize() {
+		racaComboBox.getItems().addAll("Nelore", "Pantaneiro", "Curraleiro");
 		racaComboBox.getSelectionModel().select(0);
-		
+
 		machoCheckButton.setToggleGroup(radioButtonSexoGroup);
 		femeaCheckButton.setToggleGroup(radioButtonSexoGroup);
 		femeaCheckButton.setSelected(true);
-		
+
 		dataDeNascimento.setValue(LocalDate.now());
 	}
 

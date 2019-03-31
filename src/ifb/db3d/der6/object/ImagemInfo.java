@@ -19,37 +19,33 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="imagem_info")
+@Table(name = "imagem_info")
 public class ImagemInfo {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer imagem_info_id;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "envio")
 	Date envio;
-	
-	@OneToOne(fetch=FetchType.LAZY)
+
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "regiao_id")
 	Regiao regiao;
-	
-	@OneToOne(fetch=FetchType.LAZY)
+
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sensor_id")
 	Sensor sensor;
-	
+
 	@ManyToMany
-	@JoinTable(
-			name = "bovino_imagem_info",
-			joinColumns = @JoinColumn(name = "imagem_info_id", referencedColumnName = "imagem_info_id"),
-			inverseJoinColumns = @JoinColumn(name = "bovino_id", referencedColumnName = "bovino_id")
-			)
+	@JoinTable(name = "bovino_imagem_info", joinColumns = @JoinColumn(name = "imagem_info_id", referencedColumnName = "imagem_info_id"), inverseJoinColumns = @JoinColumn(name = "bovino_id", referencedColumnName = "bovino_id"))
 	List<Bovino> bovinos;
-	
+
 	@OneToMany
 	@JoinColumn(name = "imagem_info_id")
 	List<Propriedade> propriedades;
-	
+
 	@OneToMany
 	@JoinColumn(name = "imagem_info_id")
 	List<Imagem> imagens;
@@ -81,7 +77,7 @@ public class ImagemInfo {
 	public ImagemInfo() {
 		super();
 	}
-	
+
 	public ImagemInfo(Date envio, Regiao regiao, Sensor sensor) {
 		super();
 		this.envio = envio;
@@ -108,7 +104,7 @@ public class ImagemInfo {
 	public Regiao getRegiao() {
 		return regiao;
 	}
-	
+
 	public Sensor getSensor() {
 		return sensor;
 	}
@@ -126,5 +122,5 @@ public class ImagemInfo {
 		return "ImagemInfo [imagem_info_id=" + imagem_info_id + ", envio=" + envio + ", regiao=" + regiao + ", sensor="
 				+ sensor + "]";
 	}
-	
+
 }

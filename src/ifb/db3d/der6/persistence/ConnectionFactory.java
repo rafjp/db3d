@@ -9,27 +9,24 @@ public class ConnectionFactory {
 
 	private static EntityManagerFactory entityManagerFactory;
 	private static EntityManager entityManager;
-	
-	public static void open()
-	{
+
+	public static void open() {
 		try {
 			entityManagerFactory = Persistence.createEntityManagerFactory("der6");
 			entityManager = entityManagerFactory.createEntityManager();
-		} catch(Exception e)
-		{
-			JOptionPane.showMessageDialog(null, "Erro ao conectar ao servidor!\n\n" + e.getMessage(), "Erro ao connectar", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Erro ao conectar ao servidor!\n\n" + e.getMessage(),
+					"Erro ao connectar", JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
 		}
 	}
-	
-	public static void close()
-	{
+
+	public static void close() {
 		entityManager.close();
 		entityManagerFactory.close();
 	}
-	
-	public static EntityManager getEntityManager()
-	{
+
+	public static EntityManager getEntityManager() {
 		return entityManager;
 	}
 }

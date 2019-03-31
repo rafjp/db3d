@@ -19,9 +19,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class MainFx extends Application {
-	
+
 	public static Stage mainStage;
-	
+
 	@FXML
 	private Tab bovinosTab;
 
@@ -59,7 +59,7 @@ public class MainFx extends Application {
 		Pane pane = FXMLLoader.load(FxmlResource.getFxmlPath("MainWindows"));
 		Scene scene = new Scene(pane, 1100, 600);
 		scene.getStylesheets().add(FxmlResource.getCssPath("app"));
-		primaryStage.setTitle("Der6");
+		primaryStage.setTitle("Banco de dados de biometria de bovinos");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}

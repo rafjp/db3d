@@ -11,16 +11,15 @@ import javax.persistence.Table;
 public class Campo {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer campo_id;
-	
+
 	String nome;
-	
-	
+
 	public Campo() {
-		
+
 	}
-	
+
 	public Campo(Integer campo_id, String nome) {
 		super();
 		this.campo_id = campo_id;

@@ -13,23 +13,22 @@ import javax.persistence.Table;
 public class Propriedade {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer propriedade_id;
-	
+
 	Float valora;
 	Float valorb;
-	
+
 	@ManyToOne
-	@JoinColumn(name="campo_id")
+	@JoinColumn(name = "campo_id")
 	Campo campo;
-	
+
 	@ManyToOne
-	@JoinColumn(name="imagem_info_id")
+	@JoinColumn(name = "imagem_info_id")
 	ImagemInfo imagem;
-	
-	public Propriedade()
-	{
-		
+
+	public Propriedade() {
+
 	}
 
 	public Propriedade(Integer propriedade_id, Float valora, Campo campo, ImagemInfo imagem) {

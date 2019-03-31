@@ -22,9 +22,8 @@ public class SensorCRUD {
 		ConnectionFactory.getEntityManager().remove(sensor);
 		ConnectionFactory.getEntityManager().getTransaction().commit();
 	}
-	
-	public static Sensor get(int id)
-	{
+
+	public static Sensor get(int id) {
 		EntityManager em = ConnectionFactory.getEntityManager();
 		return em.find(Sensor.class, id);
 	}

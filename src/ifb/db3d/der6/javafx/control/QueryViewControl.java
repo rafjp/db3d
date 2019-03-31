@@ -21,6 +21,7 @@ import ifb.db3d.der6.persistence.BovinoCRUD;
 import ifb.db3d.der6.persistence.ConnectionFactory;
 import ifb.db3d.der6.persistence.ImagemCRUD;
 import ifb.db3d.der6.persistence.ImagemInfoCRUD;
+import ifb.db3d.der6.persistence.PropriedadeCRUD;
 import ifb.db3d.der6.util.FxmlResource;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -96,6 +97,8 @@ public class QueryViewControl {
 			TreeItem<String> bovinoTreeItem = new TreeItem<String>(bovinoText, getIcon("media-record-2x"));
 
 			for (ImagemInfo imagemInfo : bovino.getImagens()) {
+				ConnectionFactory.getEntityManager().refresh(imagemInfo);
+
 				String imagemInfoText = String.format("img %05d %s %s", imagemInfo.getImagem_info_id(),
 						imagemInfo.getRegiao().getCaracteristica(), imagemInfo.getEnvio());
 				TreeItem<String> imgInfoTreeItem = new TreeItem<String>(imagemInfoText, getIcon("folder-2x"));
@@ -176,7 +179,26 @@ public class QueryViewControl {
 
 	@FXML
 	void onAdicionar(ActionEvent event) {
+		String item = mainTreeView.getSelectionModel().getSelectedItem().getValue();
+		ImagemInfo imagemInfo = null;
 
+		if (item.startsWith("img")) {
+			imagemInfo = ImagemInfoCRUD.get(Integer.parseInt(item.split(" ")[1]));
+		} else if (item.startsWith("arq")) {
+			Imagem down = ImagemCRUD.get(Integer.parseInt(item.split(" ")[1]));
+			imagemInfo = down.getImagemInfo();
+		} else {
+			return;
+		}
+
+		MsgPopupControl.showPropAddPopup(imagemInfo);
+
+		propTableView.getItems().clear();
+		for (Propriedade prop : imagemInfo.getPropriedades()) {
+			PropriedadeItem propItem = new PropriedadeItem(prop.getPropriedade_id() + " - " + prop.getCampo().getNome(),
+					prop.getValora().toString());
+			propTableView.getItems().add(propItem);
+		}
 	}
 
 	@FXML
@@ -292,7 +314,28 @@ public class QueryViewControl {
 
 	@FXML
 	void onRemoverSelecionado(ActionEvent event) {
+		PropriedadeItem prop = propTableView.getSelectionModel().getSelectedItem();
 
+		if (prop == null) {
+			MsgPopupControl.showNewPopup("Selecione uma propriedade primeiro!", "Erro");
+			return;
+		}
+
+		if (!MsgPopupControl.showNewConfirmAlert(
+				"Deletar propriedade:\n" + prop.getCampo() + ": " + prop.getPropriedade() + "?", "Confirmar",
+				"Deletar propriedade?"))
+			return;
+
+		int propId = Integer.parseInt(prop.getCampo().split(" - ")[0]);
+		for (Propriedade propriedade : lastImagemInfo.getPropriedades()) {
+			if (propriedade.getPropriedade_id() == propId) {
+				lastImagemInfo.getPropriedades().remove(propriedade);
+				propTableView.getItems().remove(propTableView.getSelectionModel().getSelectedIndex());
+				PropriedadeCRUD.delete(propriedade);
+				ConnectionFactory.getEntityManager().refresh(lastImagemInfo);
+				break;
+			}
+		}
 	}
 
 	@FXML
@@ -301,6 +344,7 @@ public class QueryViewControl {
 
 		if (item.startsWith("bov")) {
 			// TODO salvar tudo!
+
 		} else if (item.startsWith("img")) {
 			ImagemInfo imagemInfo = ImagemInfoCRUD.get(Integer.parseInt(item.split(" ")[1]));
 			DirectoryChooser chooser = new DirectoryChooser();
@@ -370,7 +414,8 @@ public class QueryViewControl {
 
 			propTableView.getItems().clear();
 			for (Propriedade prop : lastImagemInfo.getPropriedades()) {
-				PropriedadeItem propItem = new PropriedadeItem(prop.getCampo().getNome(), prop.getValora().toString());
+				PropriedadeItem propItem = new PropriedadeItem(
+						prop.getPropriedade_id() + " - " + prop.getCampo().getNome(), prop.getValora().toString());
 				propTableView.getItems().add(propItem);
 			}
 
@@ -405,7 +450,8 @@ public class QueryViewControl {
 
 			propTableView.getItems().clear();
 			for (Propriedade prop : lastImagemInfo.getPropriedades()) {
-				PropriedadeItem propItem = new PropriedadeItem(prop.getCampo().getNome(), prop.getValora().toString());
+				PropriedadeItem propItem = new PropriedadeItem(
+						prop.getPropriedade_id() + " - " + prop.getCampo().getNome(), prop.getValora().toString());
 				propTableView.getItems().add(propItem);
 			}
 

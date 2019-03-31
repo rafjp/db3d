@@ -23,9 +23,8 @@ public class RegiaoCRUD {
 		ConnectionFactory.getEntityManager().remove(regiao);
 		ConnectionFactory.getEntityManager().getTransaction().commit();
 	}
-	
-	public static Regiao get(int id)
-	{
+
+	public static Regiao get(int id) {
 		EntityManager em = ConnectionFactory.getEntityManager();
 		return em.find(Regiao.class, id);
 	}

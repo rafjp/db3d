@@ -11,7 +11,7 @@ public class Test {
 //		BovinoCRUD.update(bovino);
 //		BovinoCRUD.delete(bovino);
 //		ConnectionFactory.close();
-		
+
 //		ConnectionFactory.open();
 //		Regiao regiao = new Regiao("Garupa", "Parte superior");
 //		RegiaoCRUD.create(regiao);
@@ -21,7 +21,7 @@ public class Test {
 //		Sensor sensor = new Sensor("Câmera Fotográfica", "Fotos estáticas");
 //		SensorCRUD.create(sensor);
 //		ConnectionFactory.close();
-		
+
 //		ConnectionFactory.open();
 //		
 //		Regiao regiao = RegiaoCRUD.get(3);
@@ -34,7 +34,7 @@ public class Test {
 //		ImagemInfoCRUD.create(imagemInfo);
 //		
 //		ConnectionFactory.close();
-		
+
 //		ConnectionFactory.open();
 //		
 //		Imagem imagem = new Imagem("teste.txt", ImagemInfoCRUD.get(8));
@@ -48,6 +48,6 @@ public class Test {
 //		ImagemCRUD.create(imagem);
 //		
 //		ConnectionFactory.close();
-		
+
 	}
 }

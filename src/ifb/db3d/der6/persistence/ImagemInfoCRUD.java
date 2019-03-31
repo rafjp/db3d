@@ -22,9 +22,8 @@ public class ImagemInfoCRUD {
 		ConnectionFactory.getEntityManager().remove(imagemInfo);
 		ConnectionFactory.getEntityManager().getTransaction().commit();
 	}
-	
-	public static ImagemInfo get(int id)
-	{
+
+	public static ImagemInfo get(int id) {
 		EntityManager em = ConnectionFactory.getEntityManager();
 		return em.find(ImagemInfo.class, id);
 	}

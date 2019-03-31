@@ -99,11 +99,9 @@ public class ImagemControl {
 		try {
 			ImagemInfo imagemInfo = new ImagemInfo(new Date(), getSelectedRegiao(), getSelectedSensor());
 			List<Bovino> bovinosList = new ArrayList<>();
-			if(bovinoIdEntry.getText().length() > 0)
-			{
+			if (bovinoIdEntry.getText().length() > 0) {
 				String bovinos[] = bovinoIdEntry.getText().split(",");
-				for(String bovino_id: bovinos)
-				{
+				for (String bovino_id : bovinos) {
 					Bovino bovino = BovinoCRUD.get(Integer.parseInt(bovino_id));
 					bovinosList.add(bovino);
 				}
@@ -111,8 +109,7 @@ public class ImagemControl {
 			}
 			imagem = imagemInfo;
 			UploadImgControl.showNewPopup();
-		} catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			MsgPopupControl.showNewPopup("Erro ao criar imagem: " + e.getMessage(), "Erro");
 		}
@@ -143,7 +140,7 @@ public class ImagemControl {
 				return campo;
 		return null;
 	}
-	
+
 	Regiao getSelectedRegiao() {
 		if (regiaoComboBox.getSelectionModel().getSelectedItem() == null)
 			return null;
@@ -153,7 +150,7 @@ public class ImagemControl {
 				return regiao;
 		return null;
 	}
-	
+
 	Sensor getSelectedSensor() {
 		if (sensorComboBox.getSelectionModel().getSelectedItem() == null)
 			return null;

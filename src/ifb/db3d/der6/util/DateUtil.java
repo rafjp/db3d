@@ -10,9 +10,8 @@ import javax.swing.text.MaskFormatter;
 public class DateUtil {
 	public static DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 	public static DateFormat formatPG = new SimpleDateFormat("yyyy-MM-dd");
-	
-	public static MaskFormatter getMaskFormatter()
-	{
+
+	public static MaskFormatter getMaskFormatter() {
 		MaskFormatter mf = null;
 		try {
 			mf = new MaskFormatter("##/##/####");
@@ -21,14 +20,12 @@ public class DateUtil {
 		}
 		return mf;
 	}
-	
-	public static String formatDate(Date date)
-	{
+
+	public static String formatDate(Date date) {
 		return format.format(date);
 	}
-	
-	public static Date parseDate(String string)
-	{
+
+	public static Date parseDate(String string) {
 		Date date = null;
 		try {
 			date = format.parse(string);
@@ -37,9 +34,8 @@ public class DateUtil {
 		}
 		return date;
 	}
-	
-	public static Date parseDateDB(String string)
-	{
+
+	public static Date parseDateDB(String string) {
 		Date date = null;
 		try {
 			date = formatPG.parse(string);

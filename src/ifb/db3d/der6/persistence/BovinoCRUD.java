@@ -23,9 +23,8 @@ public class BovinoCRUD {
 		ConnectionFactory.getEntityManager().remove(bovino);
 		ConnectionFactory.getEntityManager().getTransaction().commit();
 	}
-	
-	public static Bovino get(int id)
-	{
+
+	public static Bovino get(int id) {
 		EntityManager em = ConnectionFactory.getEntityManager();
 		return em.find(Bovino.class, id);
 	}

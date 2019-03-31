@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="271.0" prefWidth="475.0" style="-fx-padding: 20px;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="ifb.db3d.der6.javafx.control.NovaPropControl">
+   <children>
+      <VBox alignment="CENTER" prefHeight="271.0" prefWidth="475.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label id="registro-title" alignment="CENTER" prefHeight="56.0" prefWidth="480.0" text="Adicionar nova propriedade">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="45.0" prefWidth="475.0" text="Propriedade" />
+            <ComboBox fx:id="propCombo" prefHeight="25.0" prefWidth="488.0" />
+            <Label prefHeight="46.0" prefWidth="475.0" text="Valor" />
+            <TextField fx:id="propValue" />
+            <Label />
+            <Button fx:id="addBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onAdd" prefHeight="25.0" prefWidth="196.0" text="Adicionar" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
