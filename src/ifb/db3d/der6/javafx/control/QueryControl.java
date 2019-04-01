@@ -250,14 +250,14 @@ public class QueryControl {
 			}
 		}
 
-		String commandQuery = "select ima.imagem_id from Imagem_info ima_inf\r\n"
+		String commandQuery = "select distinct ima.imagem_id from Imagem_info ima_inf\r\n"
 				+ "inner join Bovino_Imagem_Info bov_ima_inf on bov_ima_inf.imagem_info_id = ima_inf.imagem_info_id\r\n"
 				+ "inner join Bovino bov on bov.bovino_id = bov_ima_inf.bovino_id\r\n"
 				+ "inner join Regiao reg on reg.regiao_id = ima_inf.regiao_id\r\n"
 				+ "inner join Sensor sen on sen.sensor_id = ima_inf.sensor_id\r\n"
 				+ "inner join Imagem ima on ima.imagem_info_id = ima_inf.imagem_info_id\r\n"
 				+ "inner join Propriedade prop on prop.imagem_info_id = ima_inf.imagem_info_id\r\n"
-				+ "inner join Campo cam on cam.campo_id = prop.campo_id";
+				+ "left join Campo cam on cam.campo_id = prop.campo_id";
 
 		commandQuery = getBovinoQuery(commandQuery, false);
 		if (commandQuery == null) {
@@ -310,9 +310,18 @@ public class QueryControl {
 			commandQuery += propriedades;
 			handle = false;
 		}
+		
+		System.out.println(commandQuery);
+		
 		Query query = ConnectionFactory.getEntityManager().createNativeQuery(commandQuery, "ImageNativeMap");
 		@SuppressWarnings("unchecked")
 		List<Object[]> img = (List<Object[]>) query.getResultList();
+		
+		for(Object[] g: img)
+		{
+			System.out.println(g[0]);
+		}
+		
 		String imgQuery = "select ima from Imagem ima where";
 		boolean ctn = false;
 		for (Object[] imagem : img) {
@@ -326,10 +335,6 @@ public class QueryControl {
 		Query queryImg = ConnectionFactory.getEntityManager().createQuery(imgQuery);
 		@SuppressWarnings("unchecked")
 		List<Imagem> result = (List<Imagem>) queryImg.getResultList();
-		/*
-		 * String queryres = ""; // TODO: to gui for(Imagem imagem: result) {
-		 * System.out.println(imagem); queryres += imagem.toString() + "\n"; }
-		 */
 		QueryViewControl.showNewPopup(result);
 
 	}

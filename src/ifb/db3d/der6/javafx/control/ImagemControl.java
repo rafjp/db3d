@@ -67,6 +67,12 @@ public class ImagemControl {
 	private TextField valorEntry;
 
 	@FXML
+	private Button btnLimparArquivos;
+	
+	@FXML
+    private Button btnLimparProps;
+
+	@FXML
 	void onAddProp(ActionEvent event) {
 		float value;
 		try {
@@ -84,14 +90,33 @@ public class ImagemControl {
 	@FXML
 	void onCarregarArquivos(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
-		if (files != null)
-			files.clear();
-		files = fileChooser.showOpenMultipleDialog(carregarArquivosBtn.getScene().getWindow());
-		if (files == null)
+		List<File> addFiles = fileChooser.showOpenMultipleDialog(carregarArquivosBtn.getScene().getWindow());
+		if (addFiles == null)
 			return;
+		files.addAll(addFiles);
 		fileListView.getItems().clear();
 		for (File file : files)
 			fileListView.getItems().add(file.getName());
+	}
+
+	void clearFlies() {
+		fileListView.getItems().clear();
+		files.clear();
+	}
+
+	void clearProps() {
+		propTableView.getItems().clear();
+		imageProp.clear();
+	}
+
+	@FXML
+	void onClearFiles(ActionEvent event) {
+		clearFlies();
+	}
+
+	@FXML
+	void onClearProps(ActionEvent event) {
+		clearProps();
 	}
 
 	@FXML
@@ -113,6 +138,8 @@ public class ImagemControl {
 			e.printStackTrace();
 			MsgPopupControl.showNewPopup("Erro ao criar imagem: " + e.getMessage(), "Erro");
 		}
+		clearFlies();
+		clearProps();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

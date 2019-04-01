@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="678.0" prefWidth="1129.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ifb.db3d.der6.javafx.control.ImagemControl">
@@ -41,9 +42,14 @@
                         <ComboBox fx:id="regiaoComboBox" prefHeight="25.0" prefWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <ComboBox fx:id="sensorComboBox" prefHeight="25.0" prefWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Button fx:id="registrarBtn" mnemonicParsing="false" onAction="#onRegister" prefHeight="29.0" prefWidth="215.0" text="Registrar" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
-                        <Button fx:id="carregarArquivosBtn" mnemonicParsing="false" onAction="#onCarregarArquivos" prefHeight="25.0" prefWidth="400.0" text="Carregar" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Label text="Bovino ID" GridPane.rowIndex="1" />
                         <TextField fx:id="bovinoIdEntry" promptText="código do bovino" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                           <children>
+                              <Button fx:id="carregarArquivosBtn" mnemonicParsing="false" onAction="#onCarregarArquivos" prefHeight="25.0" prefWidth="200.0" text="Carregar" />
+                              <Button fx:id="btnLimparArquivos" mnemonicParsing="false" onAction="#onClearFiles" prefHeight="25.0" prefWidth="200.0" text="Limpar arquivos" />
+                           </children>
+                        </HBox>
                      </children>
                   </GridPane>
                </children>
@@ -72,7 +78,12 @@
                         <Label text="Propriedade" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
                         <Label text="Valor" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                         <ComboBox fx:id="propriedadeComboBox" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Button fx:id="addPropriedadeBtn" mnemonicParsing="false" onAction="#onAddProp" text="Adicionar propriedade" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                           <children>
+                              <Button fx:id="addPropriedadeBtn" mnemonicParsing="false" onAction="#onAddProp" text="Adicionar propriedade" />
+                              <Button fx:id="btnLimparProps" mnemonicParsing="false" onAction="#onClearProps" text="Limpar propriedades" />
+                           </children>
+                        </HBox>
                         <TextField fx:id="valorEntry" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Label id="registro-title" text="Propriedades da imagem" GridPane.columnSpan="2" GridPane.halignment="CENTER" />
                      </children>

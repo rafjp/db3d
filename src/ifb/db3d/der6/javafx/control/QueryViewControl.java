@@ -55,6 +55,7 @@ public class QueryViewControl {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	void init(List<Imagem> imagens) {
+
 		btnEditarInfoBovino.setDisable(true);
 		btnRemoverSelecionado.setDisable(true);
 		deletarBtn.setDisable(true);
@@ -104,7 +105,8 @@ public class QueryViewControl {
 				TreeItem<String> imgInfoTreeItem = new TreeItem<String>(imagemInfoText, getIcon("folder-2x"));
 
 				for (Imagem imagem : imagens) {
-					if (imagem.getImagemInfo() == imagemInfo) {
+					if (imagem.getImagemInfo().getImagem_info_id().equals(imagemInfo.getImagem_info_id())) {
+
 						String icon = "file-2x";
 						if (imagem.getExtencao().toLowerCase().endsWith(".png")
 								|| imagem.getExtencao().toLowerCase().endsWith(".jpg")
@@ -119,8 +121,9 @@ public class QueryViewControl {
 						imgInfoTreeItem.getChildren().add(imgTreeItem);
 					}
 				}
-
-				bovinoTreeItem.getChildren().add(imgInfoTreeItem);
+				
+				if(imgInfoTreeItem.getChildren().size() > 0)
+					bovinoTreeItem.getChildren().add(imgInfoTreeItem);
 			}
 			root.getChildren().add(bovinoTreeItem);
 		}

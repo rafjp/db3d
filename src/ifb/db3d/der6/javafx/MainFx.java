@@ -112,6 +112,6 @@ public class MainFx extends Application {
 
 	@FXML
 	public void stop() {
-		ConnectionFactory.close(); // TODO
+		ConnectionFactory.close();
 	}
 }
