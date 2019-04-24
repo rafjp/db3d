@@ -3,6 +3,7 @@ package ifb.db3d.der6.javafx;
 import java.io.IOException;
 
 import ifb.db3d.der6.javafx.control.ImagemControl;
+import ifb.db3d.der6.javafx.control.MsgPopupControl;
 import ifb.db3d.der6.javafx.control.QueryControl;
 import ifb.db3d.der6.persistence.ConnectionFactory;
 import ifb.db3d.der6.util.FxmlResource;
@@ -105,7 +106,7 @@ public class MainFx extends Application {
 				}
 			});
 		} catch (IOException e) {
-			e.printStackTrace();
+			MsgPopupControl.showExceptionAlert("Reinicie a aplicação!", "Erro fatal", "Erro", e);
 			System.exit(0);
 		}
 	}

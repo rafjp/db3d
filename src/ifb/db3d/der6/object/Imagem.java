@@ -22,6 +22,7 @@ public class Imagem {
 	Integer imagem_id;
 	String extencao;
 	byte[] arquivo;
+	
 	@ManyToOne
 	@JoinColumn(name = "imagem_info_id")
 	ImagemInfo imagemInfo;

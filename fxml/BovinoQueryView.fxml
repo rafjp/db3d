@@ -38,7 +38,7 @@
             <Label text="Consultar imagens" GridPane.columnSpan="3" GridPane.halignment="CENTER" />
             <CheckBox fx:id="idCheckButton" mnemonicParsing="false" text="Id" GridPane.rowIndex="1" />
             <CheckBox fx:id="sexoCheckButton" mnemonicParsing="false" text="Sexo" GridPane.rowIndex="2" />
-            <Button fx:id="consultarBovinos" mnemonicParsing="false" onAction="#onConsultarBovinos" prefWidth="200.0" text="Consultar apenas bovinos" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+            <Button fx:id="consultarBovinos" disable="true" mnemonicParsing="false" onAction="#onConsultarBovinos" prefWidth="200.0" text="Consultar apenas bovinos" visible="false" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
             <TextField fx:id="idDeTextEntry" promptText="De" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="idAteTextEntry" promptText="Até" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <RadioButton fx:id="radioMacho" mnemonicParsing="false" text="Macho" GridPane.columnIndex="1" GridPane.rowIndex="2" />

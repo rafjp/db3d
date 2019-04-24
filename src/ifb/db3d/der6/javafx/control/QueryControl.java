@@ -7,6 +7,7 @@ import javax.persistence.Query;
 import ifb.db3d.der6.object.Bovino;
 import ifb.db3d.der6.object.Campo;
 import ifb.db3d.der6.object.Imagem;
+import ifb.db3d.der6.object.ImagemInfo;
 import ifb.db3d.der6.object.Regiao;
 import ifb.db3d.der6.object.Sensor;
 import ifb.db3d.der6.persistence.ConnectionFactory;
@@ -232,13 +233,11 @@ public class QueryControl {
 				notFirstSen = true;
 			}
 
-			// Propriedade
 			else {
 				int campoId = Integer.parseInt(filtroInfo[0].trim());
-
 				if (notFirstCam) {
 					campos += " or ";
-					propriedades += " or ";
+					propriedades += " and ";
 				}
 				campos += "cam.campo_id = " + campoId;
 				String propValues[] = filtro[2].split("-");
@@ -249,17 +248,24 @@ public class QueryControl {
 				notFirstCam = true;
 			}
 		}
-
-		String commandQuery = "select distinct ima.imagem_id from Imagem_info ima_inf\r\n"
-				+ "inner join Bovino_Imagem_Info bov_ima_inf on bov_ima_inf.imagem_info_id = ima_inf.imagem_info_id\r\n"
-				+ "inner join Bovino bov on bov.bovino_id = bov_ima_inf.bovino_id\r\n"
-				+ "inner join Regiao reg on reg.regiao_id = ima_inf.regiao_id\r\n"
-				+ "inner join Sensor sen on sen.sensor_id = ima_inf.sensor_id\r\n"
-				+ "inner join Imagem ima on ima.imagem_info_id = ima_inf.imagem_info_id\r\n"
-				+ "inner join Propriedade prop on prop.imagem_info_id = ima_inf.imagem_info_id\r\n"
-				+ "left join Campo cam on cam.campo_id = prop.campo_id";
+		
+		regioes += ")";
+		sensores += ")";
+		campos += ")";
+		propriedades += ")";
+		
+		String commandQuery =
+				"select distinct ima.imagem_id, bov.bovino_id, bov_ima_inf.imagem_info_id from Bovino bov\r\n" + 
+				"left join Bovino_Imagem_Info bov_ima_inf on bov.bovino_id = bov_ima_inf.bovino_id\r\n" + 
+				"left join Imagem_info ima_inf on ima_inf.imagem_info_id = bov_ima_inf.imagem_info_id\r\n" + 
+				"left join Imagem ima on ima.imagem_info_id = ima_inf.imagem_info_id\r\n" + 
+				"left join Regiao reg on reg.regiao_id = ima_inf.regiao_id\r\n" + 
+				"left join Sensor sen on sen.sensor_id = ima_inf.sensor_id\r\n" + 
+				"left join Propriedade prop on prop.imagem_info_id = ima_inf.imagem_info_id\r\n" + 
+				"left join Campo cam on cam.campo_id = prop.campo_id";
 
 		commandQuery = getBovinoQuery(commandQuery, false);
+		
 		if (commandQuery == null) {
 			MsgPopupControl.showNewPopup("Informações inválidas!", "Erro");
 			return;
@@ -269,11 +275,6 @@ public class QueryControl {
 		if (!commandQuery.contains("where")) {
 			handle = true;
 		}
-
-		regioes += ")";
-		sensores += ")";
-		campos += ")";
-		propriedades += ")";
 
 		if (!regioes.equals("()")) {
 			if (handle)
@@ -310,33 +311,39 @@ public class QueryControl {
 			commandQuery += propriedades;
 			handle = false;
 		}
-		
-		System.out.println(commandQuery);
-		
+
 		Query query = ConnectionFactory.getEntityManager().createNativeQuery(commandQuery, "ImageNativeMap");
 		@SuppressWarnings("unchecked")
 		List<Object[]> img = (List<Object[]>) query.getResultList();
-		
-		for(Object[] g: img)
-		{
-			System.out.println(g[0]);
-		}
-		
-		String imgQuery = "select ima from Imagem ima where";
-		boolean ctn = false;
+
+		String imgQuery = "SELECT ima FROM Imagem ima WHERE ima.imagem_id IN (";
 		for (Object[] imagem : img) {
-			if (ctn)
-				imgQuery += " or";
-			imgQuery += " ima.imagem_id = " + imagem[0];
-			ctn = true;
+			imgQuery += imagem[0] + ", ";
 		}
-		if (!ctn)
-			return;
+		imgQuery += "0)";
 		Query queryImg = ConnectionFactory.getEntityManager().createQuery(imgQuery);
 		@SuppressWarnings("unchecked")
-		List<Imagem> result = (List<Imagem>) queryImg.getResultList();
-		QueryViewControl.showNewPopup(result);
+		List<Imagem> resultImagem = (List<Imagem>) queryImg.getResultList();
 
+		String imgInfoQuery = "SELECT imainf FROM Imagem_info imainf WHERE imainf.imagem_info_id IN (";
+		for (Object[] imagem : img) {
+			imgInfoQuery += imagem[2] + ", ";
+		}
+		imgInfoQuery += "0)";
+		Query queryImgInfo = ConnectionFactory.getEntityManager().createQuery(imgInfoQuery, ImagemInfo.class);
+		@SuppressWarnings("unchecked")
+		List<ImagemInfo> resultImagemInfo = (List<ImagemInfo>) queryImgInfo.getResultList();
+
+		String bovinoQuery = "SELECT bov FROM Bovino bov where bov.bovino_id IN (";
+		for (Object[] imagem : img) {
+			bovinoQuery += imagem[1] + ", ";
+		}
+		bovinoQuery += "0)";
+		Query queryBovino = ConnectionFactory.getEntityManager().createQuery(bovinoQuery);
+		@SuppressWarnings("unchecked")
+		List<Bovino> resultBovino = (List<Bovino>) queryBovino.getResultList();
+
+		QueryViewControl.showNewPopup(resultBovino, resultImagemInfo, resultImagem);
 	}
 
 	@FXML

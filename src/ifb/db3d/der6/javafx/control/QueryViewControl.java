@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Query;
 
@@ -22,6 +20,7 @@ import ifb.db3d.der6.persistence.ConnectionFactory;
 import ifb.db3d.der6.persistence.ImagemCRUD;
 import ifb.db3d.der6.persistence.ImagemInfoCRUD;
 import ifb.db3d.der6.persistence.PropriedadeCRUD;
+import ifb.db3d.der6.util.DateUtil;
 import ifb.db3d.der6.util.FxmlResource;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,7 +53,7 @@ public class QueryViewControl {
 	private Bovino lastBovinoEdit;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	void init(List<Imagem> imagens) {
+	void init(List<Bovino> bovinos, List<ImagemInfo> imagensInfo, List<Imagem> imagens) {
 
 		btnEditarInfoBovino.setDisable(true);
 		btnRemoverSelecionado.setDisable(true);
@@ -81,48 +80,47 @@ public class QueryViewControl {
 
 		bovinoRadioMacho.setToggleGroup(radioButtonSexoGroup);
 		bovinoRadioFemea.setToggleGroup(radioButtonSexoGroup);
-		bovinoRadioFemea.setSelected(true);
 
 		TreeItem<String> root = new TreeItem<String>("Banco de dados", getIcon("puzzle-piece-2x"));
 
-		Set<Bovino> bovinos = new HashSet<Bovino>();
-
-		for (Imagem imagem : imagens) {
-			for (Bovino bovino : imagem.getImagemInfo().getBovinos()) {
-				bovinos.add(bovino);
-			}
-		}
-
 		for (Bovino bovino : bovinos) {
-			String bovinoText = String.format("bov %05d %s", bovino.getBovino_id(), bovino.getNascimento().toString());
+			String bovinoText = String.format("bov %05d %s", bovino.getBovino_id(),
+					DateUtil.formatDate(bovino.getNascimento()));
 			TreeItem<String> bovinoTreeItem = new TreeItem<String>(bovinoText, getIcon("media-record-2x"));
 
-			for (ImagemInfo imagemInfo : bovino.getImagens()) {
-				ConnectionFactory.getEntityManager().refresh(imagemInfo);
-
+			for (ImagemInfo imagemInfo : imagensInfo) {
+				boolean cont = true;
+				for(Bovino bovcmp: imagemInfo.getBovinos()) {
+					if(bovcmp.getBovino_id().equals(bovino.getBovino_id())) {
+						cont = false;
+						break;
+					}
+				}
+				if(cont) continue;
+				
 				String imagemInfoText = String.format("img %05d %s %s", imagemInfo.getImagem_info_id(),
-						imagemInfo.getRegiao().getCaracteristica(), imagemInfo.getEnvio());
+						imagemInfo.getRegiao().getCaracteristica(), DateUtil.formatDate(imagemInfo.getEnvio()));
 				TreeItem<String> imgInfoTreeItem = new TreeItem<String>(imagemInfoText, getIcon("folder-2x"));
 
 				for (Imagem imagem : imagens) {
-					if (imagem.getImagemInfo().getImagem_info_id().equals(imagemInfo.getImagem_info_id())) {
+					if (!imagem.getImagemInfo().getImagem_info_id().equals(imagemInfo.getImagem_info_id()))
+						continue;
 
-						String icon = "file-2x";
-						if (imagem.getExtencao().toLowerCase().endsWith(".png")
-								|| imagem.getExtencao().toLowerCase().endsWith(".jpg")
-								|| imagem.getExtencao().toLowerCase().endsWith(".gif")
-								|| imagem.getExtencao().toLowerCase().endsWith(".tiff")
-								|| imagem.getExtencao().toLowerCase().endsWith(".jpeg")) {
-							icon = "image-2x";
-						}
-
-						String imageText = String.format("arq %05d %s", imagem.getImagem_id(), imagem.getExtencao());
-						TreeItem<String> imgTreeItem = new TreeItem<String>(imageText, getIcon(icon));
-						imgInfoTreeItem.getChildren().add(imgTreeItem);
+					String icon = "file-2x";
+					if (imagem.getExtencao().toLowerCase().endsWith(".png")
+							|| imagem.getExtencao().toLowerCase().endsWith(".jpg")
+							|| imagem.getExtencao().toLowerCase().endsWith(".gif")
+							|| imagem.getExtencao().toLowerCase().endsWith(".tiff")
+							|| imagem.getExtencao().toLowerCase().endsWith(".jpeg")) {
+						icon = "image-2x";
 					}
+
+					String imageText = String.format("arq %05d %s", imagem.getImagem_id(), imagem.getExtencao());
+					TreeItem<String> imgTreeItem = new TreeItem<String>(imageText, getIcon(icon));
+					imgInfoTreeItem.getChildren().add(imgTreeItem);
 				}
-				
-				if(imgInfoTreeItem.getChildren().size() > 0)
+
+				if (imgInfoTreeItem.getChildren().size() > 0)
 					bovinoTreeItem.getChildren().add(imgInfoTreeItem);
 			}
 			root.getChildren().add(bovinoTreeItem);
@@ -393,7 +391,7 @@ public class QueryViewControl {
 		if (item.startsWith("bov")) {
 			lastBovinoEdit = BovinoCRUD.get(Integer.parseInt(item.split(" ")[1]));
 			txtBovinoCod.setText(lastBovinoEdit.getBovino_id() + "");
-			if (lastBovinoEdit.getSexo()) {
+			if (!lastBovinoEdit.getSexo()) {
 				bovinoRadioMacho.setSelected(true);
 			} else {
 				bovinoRadioFemea.setSelected(true);
@@ -498,7 +496,7 @@ public class QueryViewControl {
 			comboBoxRegiao.getSelectionModel().select(0);
 	}
 
-	private static void createPopup(List<Imagem> imagens, int w, int h) {
+	private static void createPopup(List<Bovino> bovinos, List<ImagemInfo> imagensInfo, List<Imagem> imagens, int w, int h) {
 		try {
 			FXMLLoader loader = new FXMLLoader(FxmlResource.getFxmlPath("QueryResult"));
 
@@ -506,7 +504,7 @@ public class QueryViewControl {
 			msgStage.getIcons().add(new Image(FxmlResource.getIconPath("document-4x")));
 			Pane pane = loader.load();
 			QueryViewControl queryViewControl = (QueryViewControl) loader.getController();
-			queryViewControl.init(imagens);
+			queryViewControl.init(bovinos, imagensInfo, imagens);
 			Scene scene = new Scene(pane, w, h);
 			scene.getStylesheets().add(FxmlResource.getCssPath("app"));
 			msgStage.setTitle("Resultado da consulta");
@@ -518,11 +516,7 @@ public class QueryViewControl {
 		}
 	}
 
-	public static void showNewPopup(List<Imagem> imagens) {
-		createPopup(imagens, 1100, 600);
-	}
-
-	public static void showNewPopup(List<Imagem> imagens, int width, int height) {
-		createPopup(imagens, width, height);
+	public static void showNewPopup(List<Bovino> bovinos, List<ImagemInfo> imagensInfo, List<Imagem> imagens) {
+		createPopup(bovinos, imagensInfo, imagens, 1100, 600);
 	}
 }

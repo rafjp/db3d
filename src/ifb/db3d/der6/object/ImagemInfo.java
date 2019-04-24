@@ -18,7 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-@Entity
+@Entity(name = "Imagem_info")
 @Table(name = "imagem_info")
 public class ImagemInfo {
 

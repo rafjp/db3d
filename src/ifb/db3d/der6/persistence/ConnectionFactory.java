@@ -3,7 +3,8 @@ package ifb.db3d.der6.persistence;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.swing.JOptionPane;
+
+import ifb.db3d.der6.javafx.control.MsgPopupControl;
 
 public class ConnectionFactory {
 
@@ -15,8 +16,7 @@ public class ConnectionFactory {
 			entityManagerFactory = Persistence.createEntityManagerFactory("der6");
 			entityManager = entityManagerFactory.createEntityManager();
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Erro ao conectar ao servidor!\n\n" + e.getMessage(),
-					"Erro ao connectar", JOptionPane.ERROR_MESSAGE);
+			MsgPopupControl.showExceptionAlert("Erro ao conectar ao servidor!", "Erro ao connectar", "Erro ao connectar", e);
 			System.exit(0);
 		}
 	}
